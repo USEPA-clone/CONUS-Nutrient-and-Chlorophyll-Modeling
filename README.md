@@ -1,2 +1,2 @@
 # CONUS-Nutrient-and-Chlorophyll-Modeling
-Source data and code for predictive modeling of Chl a and TN + TP at the HUC12 scale across CONUS
+Supplementary data and code for predictive modeling of lake Chl-a and river TN + TP at the HUC12 scale across CONUS from Dietrich et al.
