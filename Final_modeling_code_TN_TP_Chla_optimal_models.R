@@ -163,7 +163,7 @@ get_statistics <- function(out) {
 
 
 #Load in data
-Chla <- read.csv('https://raw.githubusercontent.com/dietrimj/Modeling_example_data/main/Chla.csv')
+Chla <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/Chla.csv')
 
 #Convert dependent variable to type factor
 Chla$Eutrophic_num <- factor(Chla$Eutrophic_num, levels = c("0", "1"))
@@ -346,7 +346,7 @@ get_statistics <- function(out) {
 }
 
 #Load in data
-TN50 <- read.csv('https://raw.githubusercontent.com/dietrimj/Modeling_example_data/main/TN50.csv')
+TN50 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/TN50.csv')
 
 #Convert dependent variable to type factor
 TN50$Cat_TN <- if_else(TN50$Cat_TN == "Low", 0, 1)
@@ -530,7 +530,7 @@ get_statistics <- function(out) {
 }
 
 #Load in data
-TN75 <- read.csv('https://raw.githubusercontent.com/dietrimj/Modeling_example_data/main/TN75.csv')
+TN75 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/TN75.csv')
 
 #Convert dependent variable to type factor
 TN75$Cat_TN <- if_else(TN50$Cat_TN == "Low", 0, 1)
@@ -714,7 +714,7 @@ get_statistics <- function(out) {
 }
 
 #Load in data
-TP50 <- read.csv('https://raw.githubusercontent.com/dietrimj/Modeling_example_data/main/TP50.csv')
+TP50 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/TP50.csv')
 
 #Convert dependent variable to type factor
 TP50$Cat_TP <- if_else(TP50$Cat_TP == "Low", 0, 1)
@@ -898,7 +898,7 @@ get_statistics <- function(out) {
 }
 
 #Load in data
-TP75 <- read.csv('https://raw.githubusercontent.com/dietrimj/Modeling_example_data/main/TP75.csv')
+TP75 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/TP75.csv')
 
 #Convert dependent variable to type factor
 TP75$Cat_TP <- if_else(TP75$Cat_TP == "Low", 0, 1)
@@ -932,7 +932,7 @@ get_statistics(out)
 
 
 #Predictions from optimal models for remaining HUC12s-------------
-#turn off scientific notation 
+#turn off scientific notation for proper upload of HUC12 IDs
 options(scipen=123)
 
 ##Chl-a---------
@@ -947,7 +947,7 @@ spgmod1 <- spglm(
 
 # make predictions on remaining HUC12s using newdata from original Chl-a model code
 # which contains HUC12 centroid coordinates
-HUC12_predict_corrected <- read.csv("https://raw.githubusercontent.com/dietrimj/Modeling_example_data/main/HUC12_predict_corrected.csv")
+HUC12_predict_corrected <- read.csv("https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/HUC12_predict_corrected.csv")
 
 HUC12_predict_corrected$preds <- 
   predict(spgmod1, newdata = HUC12_predict_corrected, type = "response",
@@ -968,7 +968,7 @@ spgmod1 <- spglm(
 
 # make predictions on remaining HUC12s using newdata from original TN/TP model code
 # which contains HUC12 centroid coordinates
-HUC12_predict_TN50 <- read.csv("https://raw.githubusercontent.com/dietrimj/Modeling_example_data/main/HUC12_predict_TN_1.csv")
+HUC12_predict_TN50 <- read.csv("https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/HUC12_predict_TN_1.csv")
 
 HUC12_predict_TN50$preds <- 
   predict(spgmod1, newdata = HUC12_predict_TN50, type = "response",
@@ -990,7 +990,7 @@ spgmod1 <- spglm(
 
 # make predictions on remaining HUC12s using newdata from original TN/TP model code
 # which contains HUC12 centroid coordinates
-HUC12_predict_TN75 <- read.csv("https://raw.githubusercontent.com/dietrimj/Modeling_example_data/main/HUC12_predict_TN_2.csv")
+HUC12_predict_TN75 <- read.csv("https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/HUC12_predict_TN_2.csv")
 
 HUC12_predict_TN75$preds <- 
   predict(spgmod1, newdata = HUC12_predict_TN75, 
@@ -1012,7 +1012,7 @@ spgmod1 <- spglm(
 
 # make predictions on remaining HUC12s using newdata from original TN/TP model code
 # which contains HUC12 centroid coordinates
-HUC12_predict_TP50 <- read.csv("https://raw.githubusercontent.com/dietrimj/Modeling_example_data/main/HUC12_predict_TP_1.csv")
+HUC12_predict_TP50 <- read.csv("https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/HUC12_predict_TP_1.csv")
 
 HUC12_predict_TP50$preds <- 
   predict(spgmod1, newdata = HUC12_predict_TP50, 
@@ -1033,7 +1033,7 @@ spgmod1 <- spglm(
 
 # make predictions on remaining HUC12s using newdata from original TN/TP model code
 # which contains HUC12 centroid coordinates
-HUC12_predict_TP75 <- read.csv("https://raw.githubusercontent.com/dietrimj/Modeling_example_data/main/HUC12_predict_TP_2.csv")
+HUC12_predict_TP75 <- read.csv("https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/HUC12_predict_TP_2.csv")
 
 HUC12_predict_TP75$preds <- 
   predict(spgmod1, newdata = HUC12_predict_TP75, 
