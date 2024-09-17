@@ -937,7 +937,7 @@ options(scipen=123)
 
 ##Chl-a---------
 # fit spatial glm model on all data (not just training data)
-spgmod1 <- spglm(
+spgmod_Chla <- spglm(
  formula = Eutrophic_num ~ WOODY_VEG_PCT_HUC12 + ATEMP_SUMMER_HIST_HUC12 + N_RED_DRYDEP_HUC12,
   family = "binomial",
   data = Chla, local = FALSE,
@@ -950,7 +950,7 @@ spgmod1 <- spglm(
 HUC12_predict_corrected <- read.csv("https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/HUC12_predict_corrected.csv")
 
 HUC12_predict_corrected$preds <- 
-  predict(spgmod1, newdata = HUC12_predict_corrected, type = "response",
+  predict(spgmod_Chla, newdata = HUC12_predict_corrected, type = "response",
           local = FALSE)
 
 #Export the data
@@ -958,7 +958,7 @@ write.csv(HUC12_predict_corrected, "Chla_HUC12_predictions.csv")
 
 ##TN50-------
 # fit spatial glm model on all data (not just training data)
-spgmod1 <- spglm(
+spgmod_TN50 <- spglm(
   formula = Cat_TN ~ WOODY_VEG_PCT_HUC12 + N_RED_DRYDEP_HUC12,
   family = "binomial", local = FALSE,
   data = TN50,
@@ -971,7 +971,7 @@ spgmod1 <- spglm(
 HUC12_predict_TN50 <- read.csv("https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/HUC12_predict_TN_1.csv")
 
 HUC12_predict_TN50$preds <- 
-  predict(spgmod1, newdata = HUC12_predict_TN50, type = "response",
+  predict(spgmod_TN50, newdata = HUC12_predict_TN50, type = "response",
           local = FALSE)
 
 #Export the data
@@ -980,7 +980,7 @@ write.csv(HUC12_predict_TN50, "TN50_HUC12_predictions.csv")
 
 ##TN75-------
 # fit spatial glm model on all data (not just training data)
-spgmod1 <- spglm(
+spgmod_TN75 <- spglm(
   formula = Cat_TN ~ TILE_DRAINAGE_PCT_HUC12 + N_DEP_TOTAL_HUC12,
   family = "binomial",
   data = TN75, local = FALSE,
@@ -993,7 +993,7 @@ spgmod1 <- spglm(
 HUC12_predict_TN75 <- read.csv("https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/HUC12_predict_TN_2.csv")
 
 HUC12_predict_TN75$preds <- 
-  predict(spgmod1, newdata = HUC12_predict_TN75, 
+  predict(spgmod_TN75, newdata = HUC12_predict_TN75, 
           local = FALSE, type = "response")
 
 #Export the data
@@ -1002,7 +1002,7 @@ write.csv(HUC12_predict_TN75, "TN75_HUC12_predictions.csv")
 
 ##TP50--------
 # fit spatial glm model on all data (not just training data)
-spgmod1 <- spglm(
+spgmod_TP50 <- spglm(
   formula = Cat_TP ~ WOODY_VEG_PCT_HUC12 + Average.Annual.Surface.Runoff,
   family = "binomial",
   data = TP50,  local = FALSE,
@@ -1015,7 +1015,7 @@ spgmod1 <- spglm(
 HUC12_predict_TP50 <- read.csv("https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/HUC12_predict_TP_1.csv")
 
 HUC12_predict_TP50$preds <- 
-  predict(spgmod1, newdata = HUC12_predict_TP50, 
+  predict(spgmod_TP50, newdata = HUC12_predict_TP50, 
           local = FALSE, type = "response")
 
 #Export the data
@@ -1023,7 +1023,7 @@ write.csv(HUC12_predict_TP50, "TP50_HUC12_predictions.csv")
 
 ##TP75-------
 # fit spatial glm model on all data (not just training data)
-spgmod1 <- spglm(
+spgmod_TP75 <- spglm(
   formula = Cat_TP ~ WOODY_VEG_PCT_HUC12 + RUNOFF_SPRING_HIST_HUC12,
   family = "binomial",
   data = TP75,  local = FALSE,
@@ -1036,7 +1036,7 @@ spgmod1 <- spglm(
 HUC12_predict_TP75 <- read.csv("https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/HUC12_predict_TP_2.csv")
 
 HUC12_predict_TP75$preds <- 
-  predict(spgmod1, newdata = HUC12_predict_TP75, 
+  predict(spgmod_TP75, newdata = HUC12_predict_TP75, 
           local = FALSE, type = "response")
 
 #Export the data
