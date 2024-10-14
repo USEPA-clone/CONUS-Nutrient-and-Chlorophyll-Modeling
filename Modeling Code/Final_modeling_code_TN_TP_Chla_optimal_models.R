@@ -33,16 +33,19 @@ cv <- function(unique_index, data, local) {
   
   rf_preds <- rf$predictions
   success_column <- which(colnames(rf_preds) == "1")  
-  data_train$ranger_resid <- as.numeric(as.character(data_train$Eutrophic_num)) - rf_preds[, success_column]
+  rf_preds_success <- rf_preds[, success_column]
+  data_train$ranger_resid <- as.numeric(as.character(data_train$Eutrophic_num)) - rf_preds_success
+  data_train$ranger_resid_scaled <- data_train$ranger_resid / sqrt(rf_preds_success * (1 - rf_preds_success))
   
   # model spatial residuals
   # spatial random forest model
-  spmod <- splm(ranger_resid ~ 1, data = data_train, spcov_type = "exponential",
+  spmod <- splm(ranger_resid_scaled ~ 1, data = data_train, spcov_type = "exponential",
                 xcoord = Long, ycoord = Lat, local = local)
   
   # predict for ranger models
   preds_ranger <- predict(rf, data = data_test)$predictions[, success_column]
-  preds_spatial_resid <- predict(spmod, newdata = data_test, local = local)
+  preds_spatial_resid_scaled <- predict(spmod, newdata = data_test, local = local)
+  preds_spatial_resid <- preds_spatial_resid_scaled * sqrt(preds_ranger * (1 - preds_ranger))
   preds_ranger_spatial <- preds_ranger + preds_spatial_resid
   preds_ranger_spatial <- pmin(1, preds_ranger_spatial)
   preds_ranger_spatial <- pmax(0, preds_ranger_spatial)
@@ -163,7 +166,7 @@ get_statistics <- function(out) {
 
 
 #Load in data
-Chla <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/Chla.csv')
+Chla <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/refs/heads/main/Modeling%20Code%20Input%20Files/Chla.csv')
 
 #Convert dependent variable to type factor
 Chla$Eutrophic_num <- factor(Chla$Eutrophic_num, levels = c("0", "1"))
@@ -217,19 +220,23 @@ cv <- function(unique_index, data, local) {
   
   rf_preds <- rf$predictions
   success_column <- which(colnames(rf_preds) == "1")  
-  data_train$ranger_resid <- as.numeric(as.character(data_train$Cat_TN)) - rf_preds[, success_column]
+  rf_preds_success <- rf_preds[, success_column]
+  data_train$ranger_resid <- as.numeric(as.character(data_train$Cat_TN)) - rf_preds_success
+  data_train$ranger_resid_scaled <- data_train$ranger_resid / sqrt(rf_preds_success * (1 - rf_preds_success))
   
   # model spatial residuals
   # spatial random forest model
-  spmod <- splm(ranger_resid ~ 1, data = data_train, spcov_type = "exponential",
+  spmod <- splm(ranger_resid_scaled ~ 1, data = data_train, spcov_type = "exponential",
                 xcoord = Long, ycoord = Lat, local = local)
   
   # predict for ranger models
   preds_ranger <- predict(rf, data = data_test)$predictions[, success_column]
-  preds_spatial_resid <- predict(spmod, newdata = data_test, local = local)
+  preds_spatial_resid_scaled <- predict(spmod, newdata = data_test, local = local)
+  preds_spatial_resid <- preds_spatial_resid_scaled * sqrt(preds_ranger * (1 - preds_ranger))
   preds_ranger_spatial <- preds_ranger + preds_spatial_resid
   preds_ranger_spatial <- pmin(1, preds_ranger_spatial)
   preds_ranger_spatial <- pmax(0, preds_ranger_spatial)
+  
   
   # fit glm model
   # binomial family, so essentially logistic regression
@@ -346,7 +353,7 @@ get_statistics <- function(out) {
 }
 
 #Load in data
-TN50 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/TN50.csv')
+TN50 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/refs/heads/main/Modeling%20Code%20Input%20Files/TN50.csv')
 
 #Convert dependent variable to type factor
 TN50$Cat_TN <- if_else(TN50$Cat_TN == "Low", 0, 1)
@@ -401,19 +408,23 @@ cv <- function(unique_index, data, local) {
   
   rf_preds <- rf$predictions
   success_column <- which(colnames(rf_preds) == "1")  
-  data_train$ranger_resid <- as.numeric(as.character(data_train$Cat_TN)) - rf_preds[, success_column]
+  rf_preds_success <- rf_preds[, success_column]
+  data_train$ranger_resid <- as.numeric(as.character(data_train$Cat_TN)) - rf_preds_success
+  data_train$ranger_resid_scaled <- data_train$ranger_resid / sqrt(rf_preds_success * (1 - rf_preds_success))
   
   # model spatial residuals
   # spatial random forest model
-  spmod <- splm(ranger_resid ~ 1, data = data_train, spcov_type = "exponential",
+  spmod <- splm(ranger_resid_scaled ~ 1, data = data_train, spcov_type = "exponential",
                 xcoord = Long, ycoord = Lat, local = local)
   
   # predict for ranger models
   preds_ranger <- predict(rf, data = data_test)$predictions[, success_column]
-  preds_spatial_resid <- predict(spmod, newdata = data_test, local = local)
+  preds_spatial_resid_scaled <- predict(spmod, newdata = data_test, local = local)
+  preds_spatial_resid <- preds_spatial_resid_scaled * sqrt(preds_ranger * (1 - preds_ranger))
   preds_ranger_spatial <- preds_ranger + preds_spatial_resid
   preds_ranger_spatial <- pmin(1, preds_ranger_spatial)
   preds_ranger_spatial <- pmax(0, preds_ranger_spatial)
+  
   
   # fit glm model
   # binomial family, so essentially logistic regression
@@ -530,7 +541,7 @@ get_statistics <- function(out) {
 }
 
 #Load in data
-TN75 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/TN75.csv')
+TN75 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/refs/heads/main/Modeling%20Code%20Input%20Files/TN75.csv')
 
 #Convert dependent variable to type factor
 TN75$Cat_TN <- if_else(TN50$Cat_TN == "Low", 0, 1)
@@ -579,25 +590,29 @@ cv <- function(unique_index, data, local) {
   
   # fit random forest models
   # "regular" random forest ranger model
-  rf <- ranger(Cat_TP ~ WOODY_VEG_PCT_HUC12 + Average.Annual.Surface.Runoff, 
+  rf <- ranger(Cat_TP ~ WOODY_VEG_PCT_HUC12 + Average.Annual.Surface.Runoff,
                data = data_train, probability = TRUE)
   
   
   rf_preds <- rf$predictions
   success_column <- which(colnames(rf_preds) == "1")  
-  data_train$ranger_resid <- as.numeric(as.character(data_train$Cat_TP)) - rf_preds[, success_column]
+  rf_preds_success <- rf_preds[, success_column]
+  data_train$ranger_resid <- as.numeric(as.character(data_train$Cat_TP)) - rf_preds_success
+  data_train$ranger_resid_scaled <- data_train$ranger_resid / sqrt(rf_preds_success * (1 - rf_preds_success))
   
   # model spatial residuals
   # spatial random forest model
-  spmod <- splm(ranger_resid ~ 1, data = data_train, spcov_type = "exponential",
+  spmod <- splm(ranger_resid_scaled ~ 1, data = data_train, spcov_type = "exponential",
                 xcoord = Long, ycoord = Lat, local = local)
   
   # predict for ranger models
   preds_ranger <- predict(rf, data = data_test)$predictions[, success_column]
-  preds_spatial_resid <- predict(spmod, newdata = data_test, local = local)
+  preds_spatial_resid_scaled <- predict(spmod, newdata = data_test, local = local)
+  preds_spatial_resid <- preds_spatial_resid_scaled * sqrt(preds_ranger * (1 - preds_ranger))
   preds_ranger_spatial <- preds_ranger + preds_spatial_resid
   preds_ranger_spatial <- pmin(1, preds_ranger_spatial)
   preds_ranger_spatial <- pmax(0, preds_ranger_spatial)
+  
   
   # fit glm model
   # binomial family, so essentially logistic regression
@@ -714,7 +729,7 @@ get_statistics <- function(out) {
 }
 
 #Load in data
-TP50 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/TP50.csv')
+TP50 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/refs/heads/main/Modeling%20Code%20Input%20Files/TP50.csv')
 
 #Convert dependent variable to type factor
 TP50$Cat_TP <- if_else(TP50$Cat_TP == "Low", 0, 1)
@@ -763,25 +778,29 @@ cv <- function(unique_index, data, local) {
   
   # fit random forest models
   # "regular" random forest ranger model
-  rf <- ranger(Cat_TP ~ WOODY_VEG_PCT_HUC12 + RUNOFF_SPRING_HIST_HUC12, 
+  rf <- ranger(Cat_TP ~ WOODY_VEG_PCT_HUC12 + RUNOFF_SPRING_HIST_HUC12,
                data = data_train, probability = TRUE)
   
   
   rf_preds <- rf$predictions
   success_column <- which(colnames(rf_preds) == "1")  
-  data_train$ranger_resid <- as.numeric(as.character(data_train$Cat_TP)) - rf_preds[, success_column]
+  rf_preds_success <- rf_preds[, success_column]
+  data_train$ranger_resid <- as.numeric(as.character(data_train$Cat_TP)) - rf_preds_success
+  data_train$ranger_resid_scaled <- data_train$ranger_resid / sqrt(rf_preds_success * (1 - rf_preds_success))
   
   # model spatial residuals
   # spatial random forest model
-  spmod <- splm(ranger_resid ~ 1, data = data_train, spcov_type = "exponential",
+  spmod <- splm(ranger_resid_scaled ~ 1, data = data_train, spcov_type = "exponential",
                 xcoord = Long, ycoord = Lat, local = local)
   
   # predict for ranger models
   preds_ranger <- predict(rf, data = data_test)$predictions[, success_column]
-  preds_spatial_resid <- predict(spmod, newdata = data_test, local = local)
+  preds_spatial_resid_scaled <- predict(spmod, newdata = data_test, local = local)
+  preds_spatial_resid <- preds_spatial_resid_scaled * sqrt(preds_ranger * (1 - preds_ranger))
   preds_ranger_spatial <- preds_ranger + preds_spatial_resid
   preds_ranger_spatial <- pmin(1, preds_ranger_spatial)
   preds_ranger_spatial <- pmax(0, preds_ranger_spatial)
+  
   
   # fit glm model
   # binomial family, so essentially logistic regression
@@ -898,7 +917,7 @@ get_statistics <- function(out) {
 }
 
 #Load in data
-TP75 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/main/TP75.csv')
+TP75 <- read.csv('https://raw.githubusercontent.com/USEPA/CONUS-Nutrient-and-Chlorophyll-Modeling/refs/heads/main/Modeling%20Code%20Input%20Files/TP75.csv')
 
 #Convert dependent variable to type factor
 TP75$Cat_TP <- if_else(TP75$Cat_TP == "Low", 0, 1)
@@ -1041,3 +1060,9 @@ HUC12_predict_TP75$preds <-
 
 #Export the data
 write.csv(HUC12_predict_TP75, "TP75_HUC12_predictions.csv")
+
+
+#Save the spglm models-------
+save(spgmod_Chla, spgmod_TN50, spgmod_TN75, 
+     spgmod_TP50, spgmod_TP75, 
+     file = "optimal_spglm_models.RData")
