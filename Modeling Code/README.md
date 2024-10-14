@@ -1,1 +1,1 @@
-Note that the file locations in the codes have changed, although they are still available within the GitHub repository or Zenodo. The user will need to make sure to point to the correct files within the code for upload.
+Note that the file locations of the data frames within the code may have changed. The user will need to make sure to point to the correct GitHub url links within the code for proper upload and running of the code. 
